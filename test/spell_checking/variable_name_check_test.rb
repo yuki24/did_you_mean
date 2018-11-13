@@ -49,6 +49,15 @@ class VariableNameCheckTest < Minitest::Test
     assert_match "Did you mean?  from_module", error.to_s
   end
 
+  def test_corrections_include_global_variable_name
+    error = assert_raises(NameError) do
+      stin
+    end
+
+    assert_correction :$stdin, error.corrections
+    assert_match "Did you mean?  $stdin", error.to_s
+  end
+
   def test_corrections_include_local_variable_name
     person = person = nil
     error = (eprson rescue $!) # Do not use @assert_raises here as it changes a scope.
